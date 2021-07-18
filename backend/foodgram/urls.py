@@ -10,9 +10,9 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('api/', include('api.urls')),
+    path('api/', include('backend.api.urls')),
     path('auth/', include('backend.users.urls')),
-    #path('', include('recipes.urls')),
+    path('', include('backend.recipes.urls')),
 ]
 
 if settings.DEBUG:
