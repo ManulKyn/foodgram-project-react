@@ -14,25 +14,37 @@ services:
     restart: always
     env_file:
       - ./.env
-  web:
-    image: uis999asal/foodgram:latest
+frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ../frontend/:/app/result_build/
+    depends_on:
+      - db
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     restart: always
+    volumes:
+      - static_value:/code/static/
+      - media_value:/code/media/
     depends_on:
       - db
     env_file:
       - ./.env
-    volumes:
-      - static_value:/code/static
-      - media_value:/code/media/
   nginx:
     image: nginx:1.19.3
     container_name: nginx
     restart: unless-stopped
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - static_value:/var/html/static:ro
-      - media_value:/var/html/media:ro
+      - ../frontend/build:/usr/share/nginx/html/
+      - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
+      - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
     ports:
       - 80:80
     depends_on:
-      - web
+      - backend
+      - frontend

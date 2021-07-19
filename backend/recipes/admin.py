@@ -3,7 +3,7 @@ from django.contrib.admin.decorators import register
 from django.db.models.aggregates import Count
 
 from backend.recipes.models import (
-    Cart, Ingredient, Recipe, RecipeIngredient, Tag
+    Ingredient, Recipe, RecipeIngredient, Tag
 )
 
 
@@ -87,15 +87,3 @@ class RecipeAdmin(admin.ModelAdmin):
     def recipe_follower_count(self, obj):
         return obj.recipe_follower_count
     recipe_follower_count.short_description = 'Добавлений в избранное'
-
-
-
-@register(Cart)
-class CartAdmin(admin.ModelAdmin):
-    fields = (
-        'customer',
-        'recipe',
-    )
-    search_fields = (
-        'customer__username',
-    )

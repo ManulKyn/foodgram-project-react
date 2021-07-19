@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 from backend.foodgram.settings import PAGE_SIZE_CART, PAGE_SIZE_INDEX
 from backend.recipes.models import (
-    Cart, Recipe, RecipeIngredient, Tag, User
+    Recipe, RecipeIngredient, Tag, User
 )
 
 from .forms import RecipeForm
@@ -99,31 +99,6 @@ class RecipeDetailView(DetailView):
         return qs
 
 
-# class SubscriptionListView(LoginRequiredMixin, RecipeListView):
-#     context_object_name = 'subscription_list'
-#     template_name = 'recipes/myFollow.html'
-#     page_title = 'Мои подписки'
-#     queryset = Subscription.objects.all()
-#
-#     def get_queryset(self):
-#         qs = super().get_queryset()
-#         qs = qs.filter(user=self.request.user)
-#         return qs
-
-
-class CartListView(LoginRequiredMixin, RecipeListView):
-    context_object_name = 'cart_list'
-    template_name = 'recipes/shopList.html'
-    page_title = 'Список покупок'
-    paginate_by = PAGE_SIZE_CART
-    queryset = Cart.objects.all()
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(customer=self.request.user)
-        return qs
-
-
 class RecipeCreateView(LoginRequiredMixin, CreateView):
     model = Recipe
     page_title = 'Создание рецепта'
@@ -187,33 +162,6 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
         self.object.tags.add(*form_tags)
         recipe_ingredient_bulk_create(form_ingredients, self.object)
         return super().form_valid(form)
-
-
-def shoping_list_view(request):
-    carts = Cart.objects.filter(customer=request.user)
-
-    recipes = Recipe.objects.filter(in_cart__in=carts)
-    recipes_ingredients = RecipeIngredient.objects.filter(
-        recipe__in=recipes
-    )
-    ingredients = (
-        recipes_ingredients.values('ingredient__title').annotate(
-            total_amount=Sum('amount')
-        ).values_list(
-            'ingredient__title',
-            'total_amount',
-            'ingredient__dimension')
-    )
-    out = []
-    for item in ingredients:
-        title, amount, dimension = item
-        amount = str(float(amount))
-        out.append(f'{title} {amount} {dimension}\n')
-    out = ''.join(sorted(out))
-    filename = 'my_shoping_list.txt'
-    response = HttpResponse(out, content_type='text/plain')
-    response['Content-Disposition'] = f'attachment; filename={filename}'
-    return response
 
 
 def page_not_found(request, exception):

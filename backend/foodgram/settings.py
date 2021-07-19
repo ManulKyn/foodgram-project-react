@@ -47,7 +47,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'backend.foodgram.urls'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
-TEMPLATES_DIR_USERS = os.path.join(BASE_DIR, 'backend/users/')
+TEMPLATES_DIR_USERS = os.path.join(BASE_DIR, 'backend/users/templates/users')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -109,12 +109,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-LOGIN_URL = '/personal/auth/login/'
-LOGIN_REDIRECT_URL = 'index'
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 PAGE_SIZE_INDEX = 6
 PAGE_SIZE_CART = 12

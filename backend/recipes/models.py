@@ -1,7 +1,6 @@
 import uuid
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -59,12 +58,15 @@ class Recipe(models.Model):
     )
     title = models.CharField(max_length=256, verbose_name='Название рецепта')
     image = models.ImageField(
-        upload_to='recipes/',
+        upload_to='templates/media/',
         blank=True,
         verbose_name='Картинка',
         help_text='Загрузите изображение'
     )
-    text = models.TextField(verbose_name='Текстовое описание',default='Еще нет описания')
+    text = models.TextField(
+        verbose_name='Текстовое описание',
+        default='Еще нет описания'
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
@@ -126,34 +128,3 @@ class RecipeIngredient(models.Model):
         return (f'{self.ingredient.title} {self.amount} '
                 f'{self.ingredient.dimension} в {self.recipe}'
                 )
-
-
-
-
-
-class Cart(models.Model):
-    customer = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='customer',
-        verbose_name='Покупатель',
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        verbose_name='Рецепт',
-        related_name='in_cart',
-    )
-
-    class Meta:
-        constraints = (
-            models.UniqueConstraint(
-                fields=('customer', 'recipe',),
-                name='unique_сart'
-            ),
-        )
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
-
-    def __str__(self) -> str:
-        return f'Корзина {self.customer}: {self.recipe}'
