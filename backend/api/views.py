@@ -1,13 +1,16 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, mixins, viewsets, status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-
-from backend.recipes.models import Ingredient
-from .models import Subscription, Favorite
-from .serializers import (IngredientSerializer, SubscriptionSerializer,
-                          FavoriteSerializer, PurchaseSerializer)
+from .models import (Favorite, Ingredient, Purchase, Recipe, RecipeIngredient,
+                     Subscription, Tag)
+from .permissions import IsOwnerOrReadOnly
+from .serializers import (FavoriteSerializer, IngredientSerializer,
+                          PurchaseSerializer, RecipeIngredientSerializer,
+                          RecipeSerializer, SubscriptionSerializer,
+                          TagSerializer)
 
 
 class CreateDestroyViewSet(mixins.CreateModelMixin,
@@ -80,3 +83,21 @@ class PurchaseViewSet(mixins.ListModelMixin, CreateDestroyViewSet):
 
     def get_queryset(self):
         return self.request.user.purchases.all()
+
+
+class TagViewSet(mixins.ListModelMixin, CreateDestroyViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+class RecipeViewSet(mixins.ListModelMixin, CreateDestroyViewSet):
+    permission_classes = [IsOwnerOrReadOnly, ]
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['author', 'tags']
+
+
+class RecipeIngredientViewSet(CreateDestroyViewSet):
+    permission_classes = [IsOwnerOrReadOnly, ]
+    queryset = RecipeIngredient.objects.all()
+    serializer_class = RecipeIngredientSerializer

@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from backend.recipes.models import Ingredient
-from .models import Subscription, Favorite, Purchase
+
+from .models import (Favorite, Ingredient, Purchase, Recipe, RecipeIngredient,
+                     Subscription, Tag)
 
 
 class CustomModelSerializer(serializers.ModelSerializer):
@@ -13,13 +14,13 @@ class CustomModelSerializer(serializers.ModelSerializer):
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ('title', 'dimension')
+        fields = ('title', 'dimension',)
 
 
 class SubscriptionSerializer(CustomModelSerializer):
     class Meta:
         model = Subscription
-        fields = ('author', )
+        fields = ('user', 'author',)
 
     def validate_author(self, value):
         user = self.context['request'].user
@@ -38,3 +39,21 @@ class PurchaseSerializer(CustomModelSerializer):
     class Meta:
         model = Purchase
         fields = ('recipe', )
+
+
+class TagSerializer(CustomModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('name', 'slug', 'style',)
+
+
+class RecipeSerializer(CustomModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = '__all__'
+
+
+class RecipeIngredientSerializer(CustomModelSerializer):
+    class Meta:
+        model = RecipeIngredient
+        fields = ('recipe', 'ingredient', 'amount',)

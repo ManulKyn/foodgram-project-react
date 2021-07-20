@@ -1,6 +1,6 @@
-from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, UserCreationForm
-)
+from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
+                                       PasswordResetForm, UserCreationForm)
+
 from backend.users.models import User
 
 
