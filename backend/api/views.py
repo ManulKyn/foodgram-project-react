@@ -89,6 +89,7 @@ class TagViewSet(mixins.ListModelMixin, CreateDestroyViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
+
 class RecipeViewSet(mixins.ListModelMixin, CreateDestroyViewSet):
     permission_classes = [IsOwnerOrReadOnly, ]
     queryset = Recipe.objects.all()

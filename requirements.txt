@@ -2,7 +2,7 @@ asgiref==3.2.7
 attrs==19.3.0
 certifi==2020.4.5.1
 chardet==3.0.4
-Django==3.0.14
+Django==3.2
 django-filter==2.4.0
 djangorestframework==3.11.2
 djangorestframework-simplejwt==4.6.0

@@ -18,17 +18,16 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS = [
+    'backend.users',
+    'backend.api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sorl.thumbnail',
     'django_filters',
     'rest_framework',
-    'backend.users',
-    'backend.api',
     'djoser',
 ]
 
@@ -62,6 +61,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.foodgram.wsgi.application'
+ASGI_APPLICATION = 'backend.foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -76,6 +76,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'backend.users.CustomUser'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -107,9 +108,9 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
 
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CustomUserCreateSerializer',
-        'user': 'users.serializers.UserSerializer',
-        'current_user': 'users.serializers.UserSerializer'
+        'user_create': 'backend.users.serializers.CustomUserCreateSerializer',
+        'user': 'backend.users.serializers.UserSerializer',
+        'current_user': 'backend.users.serializers.UserSerializer'
     },
 
     'PERMISSIONS': {

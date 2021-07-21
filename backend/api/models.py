@@ -1,11 +1,10 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
 
-User = get_user_model()
+from backend.users.models import CustomUser
 
 
 class Ingredient(models.Model):
@@ -51,7 +50,7 @@ class Tag(models.Model):
 
 class Recipe(models.Model):
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='recipes',
         verbose_name='Автор',
@@ -135,7 +134,7 @@ class Favorite(models.Model):
     Stores a favorite relation between `auth.User` and `recipes.Recipe`.
     """
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='favorites',
         verbose_name='Пользователь',
@@ -164,13 +163,13 @@ class Subscription(models.Model):
     User is subscribed to author.
     """
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='follower',
         verbose_name='Подписался на',
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='following',
         verbose_name='Подписчик',
@@ -192,7 +191,7 @@ class Purchase(models.Model):
     Stores a purchase relation between `auth.User` and `recipes.Recipe`.
     """
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='purchases',
         verbose_name='Пользователь',
