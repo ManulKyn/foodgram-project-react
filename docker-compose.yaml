@@ -16,17 +16,18 @@ services:
       - ./.env
   frontend:
     build:
-      context: ../frontend
+      context: ./frontend
       dockerfile: Dockerfile
     volumes:
-      - ../frontend/:/app/result_build/
+      - ./frontend/:/app/result_build/
     depends_on:
       - db
   backend:
     build:
-      context: ../backend
+      context: ./backend
       dockerfile: Dockerfile
     restart: always
+    command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_value:/code/static/
       - media_value:/code/media/
@@ -40,9 +41,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - ../frontend/build:/usr/share/nginx/html/
-      - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
-      - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
+      - ./frontend/build:/usr/share/nginx/html/
+      - ./docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
+      - ./docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
     ports:
       - 80:80
     depends_on:

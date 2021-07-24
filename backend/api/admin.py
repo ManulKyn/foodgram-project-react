@@ -5,8 +5,8 @@ from .models import (Favorite, Ingredient, Purchase, Recipe,
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_filter = ('author', 'name', 'tags')
-    list_display = ('name', 'followers')
+    list_filter = ('author', 'title', 'tags')
+    list_display = ('title', 'followers')
 
     @admin.display(empty_value=None)
     def followers(self, obj):
@@ -14,7 +14,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class IngredientAdmin(admin.ModelAdmin):
-    list_filter = ('name', )
+    list_filter = ('title', )
 
 
 admin.site.register(Subscription)

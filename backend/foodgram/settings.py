@@ -1,20 +1,23 @@
 import os
 
 from dotenv import load_dotenv
+from django.apps import AppConfig
 
+AppConfig.default = False
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs'
 
-DEBUG = True
+DEBUG = False
 
 APPEND_SLASH = True
 
 ALLOWED_HOSTS = [
     '*',
     "127.0.0.1",
+    "84.252.130.149",
 ]
 
 INSTALLED_APPS = [
@@ -76,7 +79,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'backend.users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
