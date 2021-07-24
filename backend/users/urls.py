@@ -1,5 +1,5 @@
-from django.urls import include, path
+from django.urls import include, re_path
 
 urlpatterns = [
-    path(r'^auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls')),
 ]
