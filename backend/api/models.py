@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
 
-from backend.users.models import CustomUser
+from users.models import CustomUser
 
 
 class Ingredient(models.Model):

@@ -21,8 +21,8 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS = [
-    'backend.users',
-    'backend.api',
+    'users',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +45,7 @@ MIDDLEWARE = [
 ]
 
 
-ROOT_URLCONF = 'backend.foodgram.urls'
+ROOT_URLCONF = 'foodgram.urls'
 
 TEMPLATES = [
     {
@@ -63,8 +63,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.foodgram.wsgi.application'
-ASGI_APPLICATION = 'backend.foodgram.wsgi.application'
+WSGI_APPLICATION = 'foodgram.wsgi.application'
+ASGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -111,9 +111,9 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
 
     'SERIALIZERS': {
-        'user_create': 'backend.users.serializers.CustomUserCreateSerializer',
-        'user': 'backend.users.serializers.UserSerializer',
-        'current_user': 'backend.users.serializers.UserSerializer'
+        'user_create': 'users.serializers.CustomUserCreateSerializer',
+        'user': 'users.serializers.UserSerializer',
+        'current_user': 'users.serializers.UserSerializer'
     },
 
     'PERMISSIONS': {
