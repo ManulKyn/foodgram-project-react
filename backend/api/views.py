@@ -4,7 +4,7 @@ from rest_framework import filters, mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import (Favorite, Ingredient, Purchase, Recipe, RecipeIngredient,
+from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                      Subscription, Tag)
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (FavoriteSerializer, IngredientSerializer,
