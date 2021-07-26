@@ -1,48 +1,25 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import (FavoriteViewSet, IngredientViewSet, PurchaseViewSet,
-                    RecipeViewSet, SubscriptionViewSet, TagViewSet)
+from .views import (DownloadShoppingCart, FavouriteViewSet, FollowViewSet,
+                    IngredientViewSet, RecipesViewSet, ShoppingListViewSet,
+                    TagViewSet, showfollows)
 
 router = DefaultRouter()
-
-router.register(
-    r'purchases',
-    PurchaseViewSet,
-    basename='purchases'
-)
-router.register(
-    r'ingredients',
-    IngredientViewSet,
-    basename='ingredients'
-)
-router.register(
-    r'recipes',
-    RecipeViewSet,
-    basename='recipes'
-)
-router.register(
-    r'recipes/(?P<recipe_id>\d+)/favorite',
-    FavoriteViewSet,
-    basename='favorites'
-)
-router.register(
-    r'tags',
-    TagViewSet,
-    basename='tags'
-)
-router.register(
-    r'users/subsciptions',
-    SubscriptionViewSet,
-    basename='subscription'
-)
-router.register(
-    r'users/(?P<user_id>\d+)/subscripe',
-    SubscriptionViewSet,
-    basename='subscription'
-)
-
+router.register('tags', TagViewSet, basename='tags')
+router.register('recipes', RecipesViewSet, basename='recipes')
+router.register('ingredients', IngredientViewSet, basename='ingredients')
 
 urlpatterns = [
-    path('v1/', include(router.urls)),
+    path('users/subscriptions/',
+         showfollows, name='users_subs'),
+    path('users/<int:user_id>/subscribe/',
+         FollowViewSet.as_view(), name='subscribe'),
+    path('recipes/<int:recipe_id>/favorite/',
+         FavouriteViewSet.as_view(), name='add_recipe_to_favorite'),
+    path('recipes/<int:recipe_id>/shopping_cart/',
+         ShoppingListViewSet.as_view(), name='add_recipe_to_shopping_cart'),
+    path('recipes/download_shopping_cart/',
+         DownloadShoppingCart.as_view(), name='dowload_shopping_cart'),
+    path('', include(router.urls))
 ]

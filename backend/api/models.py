@@ -2,24 +2,25 @@ import uuid
 
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.urls import reverse
+from django.utils.html import format_html
 from users.models import CustomUser
 
 
 class Ingredient(models.Model):
-    title = models.CharField(
+    name = models.CharField(
         max_length=256,
+        unique=True,
         verbose_name='Название',
     )
     dimension = models.CharField(max_length=128, verbose_name='ед. измерения')
 
     class Meta:
-        ordering = ('title',)
+        ordering = ('name',)
         verbose_name = 'Инргедиент'
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self) -> str:
-        return f'{self.title} {self.dimension}'
+        return f'{self.name} {self.dimension}'
 
 
 class Tag(models.Model):
@@ -34,8 +35,9 @@ class Tag(models.Model):
         default=uuid.uuid1
     )
     style = models.CharField(
-        max_length=200,
-        verbose_name='Стиль'
+        max_length=7,
+        default="#ffffff",
+        verbose_name='Стиль/Цвет'
     )
 
     class Meta:
@@ -46,22 +48,29 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def colored_name(self):
+        return format_html(
+            '<span style="color: #{};">{}</span>',
+            self.hex_color,
+        )
+
 
 class Recipe(models.Model):
     author = models.ForeignKey(
         CustomUser,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='recipes',
         verbose_name='Автор',
     )
-    title = models.CharField(max_length=256, verbose_name='Название рецепта')
+    name = models.CharField(max_length=256, verbose_name='Название рецепта')
     image = models.ImageField(
-        upload_to='templates/media/',
+        upload_to='recipes',
         blank=True,
         verbose_name='Картинка',
         help_text='Загрузите изображение'
     )
     text = models.TextField(
+        max_length=256,
         verbose_name='Текстовое описание',
         default='Еще нет описания'
     )
@@ -73,16 +82,15 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
         related_name='recipes',
-        verbose_name='Тег'
+        blank=True,
+        verbose_name='Тег',
     )
     time = models.PositiveIntegerField(
         verbose_name='Время приготовления (мин)',
         validators=[MinValueValidator(1)]
     )
-    slug = models.SlugField(unique=True, max_length=256, default=uuid.uuid1,)
     pub_date = models.DateTimeField(
         auto_now_add=True,
-        db_index=True,
         verbose_name='Дата публикации',
     )
 
@@ -93,9 +101,6 @@ class Recipe(models.Model):
 
     def __str__(self) -> str:
         return f'{self.title} от {self.author}'
-
-    def get_absolute_url(self):
-        return reverse('recipe', kwargs={'slug': self.slug})
 
 
 class RecipeIngredient(models.Model):
@@ -144,6 +149,9 @@ class Favorite(models.Model):
         related_name='favored_by',
         verbose_name='Рецепт в избранном',
     )
+    when_added = models.DateTimeField(
+        auto_now_add=True, verbose_name='Дата добавления'
+    )
 
     class Meta:
         constraints = [
@@ -184,6 +192,9 @@ class Subscription(models.Model):
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
+    def __str__(self):
+        return f'{self.user} => {self.author}'
+
 
 class Purchase(models.Model):
     """
@@ -199,6 +210,9 @@ class Purchase(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт в покупках',
+    )
+    when_added = models.DateTimeField(
+        auto_now_add=True, verbose_name='Дата добавления'
     )
 
     class Meta:
