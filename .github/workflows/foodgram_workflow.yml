@@ -43,6 +43,12 @@ jobs:
           push: true
           context: ./backend/
           tags: uis999asal/foodgram:latest
+      - name: Push to Docker Hub(frontend)
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./frontend/
+          tags: uis999asal/infra_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
