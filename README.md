@@ -1,5 +1,5 @@
 # Проект Foodgram-project-react
-![Foodgram-project-react workflow]()
+![Foodgram-project-react workflow](https://github.com/ManulKyn/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 В данном проекте использовались такие технологии как GitHub, Docker, NGINX, Python, Django, PostgreSQL
 
