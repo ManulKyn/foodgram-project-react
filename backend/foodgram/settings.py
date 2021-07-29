@@ -1,16 +1,19 @@
 import os
+import environ
 
-from dotenv import load_dotenv
 from django.apps import AppConfig
 
+
+env = environ.Env()
+environ.Env.read_env()
+
 AppConfig.default = False
-load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs'
 
-DEBUG = False
+DEBUG = True
 
 APPEND_SLASH = True
 
@@ -68,14 +71,15 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
+        env.db(),
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', default='postgres'),
-        'USER': os.environ.get('POSTGRES_USER', default='postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='postgres'),
-        'HOST': os.environ.get('DB_HOST', default='localhost'),
-        'PORT': os.environ.get('DB_PORT', default='5432'),
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': os.environ.get('DB_NAME', default='foodgram'),
+        # 'USER': os.environ.get('POSTGRES_USER', default='foodgram_user'),
+        # 'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='xxxyyyzzz'),
+        # 'HOST': os.environ.get('DB_HOST', default='db'),
+        # 'PORT': os.environ.get('DB_PORT', default='5432'),
     }
 }
 
