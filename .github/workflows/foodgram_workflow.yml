@@ -58,11 +58,14 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           stack_file_name: docker-compose.yml
           script: |
+            cd foodgram-project-react/infra
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/infra_frontend:3007
             sudo docker-compose stop
+            cd ../backend
             touch .env
             echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+            cd ../infra
             sudo docker-compose up -d
 
   send_message:
