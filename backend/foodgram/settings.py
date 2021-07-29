@@ -3,7 +3,7 @@ import os
 import environ
 
 from django.apps import AppConfig
-
+from django.core.wsgi import get_wsgi_application
 
 env = environ.Env()
 environ.Env.read_env()
@@ -69,6 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
+application = get_wsgi_application()
 
 DATABASES = {
     'default': {
